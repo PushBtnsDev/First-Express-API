@@ -13,6 +13,39 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/name', async (req, res, next) => {
+  // assumes GET has 'name' query string
+  // returns a single comment by provided username
+  if (!req.query.name) {
+    res.status(422).send('invalid query');
+  } else {
+    try {
+      const comment = await Comment.findOne({
+        "name" : new RegExp('^' + req.query.name + '$', "i")
+      });
+      res.send(comment);
+    }
+    catch(err) {
+      res.status(500).send(err);
+    }
+  }
+})
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.id, (err, comment) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.send(comment);
+      }
+    })
+  }
+  catch(err) {
+    res.status(500).send(err);
+  }
+});
+
 router.post('/', async (req, res, next) => {
   const comment = new Comment({
     name: req.body.name,
