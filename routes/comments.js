@@ -13,4 +13,23 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.post('/', async (req, res, next) => {
+  const comment = new Comment({
+    name: req.body.name,
+    email: req.body.email,
+    movie_id: mongoose.Types.ObjectId(),
+    text: req.body.text,
+    date: Date.now()
+  })
+
+  try {
+    let newComment = await comment.save();
+    res.send(newComment);
+  }
+  catch(err) {
+    console.log(err);
+    res.send(500).send(err);
+  }
+})
+
 module.exports = router;
