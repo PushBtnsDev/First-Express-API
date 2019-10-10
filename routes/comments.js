@@ -68,4 +68,28 @@ router.post('/', async (req, res, next) => {
   }
 })
 
+router.patch('/update/:id', async (req, res, next) => {
+  // PATCH comment by id
+  const { text } = req.body
+  try {
+    const comment = await Comment.findById(req.params.id, async (err, comment) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        // Update comment
+        try {
+          comment.text = text;
+          let updatedComment = await comment.save();
+          res.send(updatedComment);
+        }
+        catch (err) {
+          res.status(500).send(err);
+        }
+      }
+    })
+  }
+  catch (err) {
+    res.status(500).send(err);
+  }
+})
 module.exports = router;
