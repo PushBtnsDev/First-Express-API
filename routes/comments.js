@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const Comment = require('./../models/Comment');
+const Comment = require('../models/Comment');
 
 router.get('/', async (req, res, next) => {
   // GET all comments
