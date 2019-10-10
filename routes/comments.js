@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Comment = require('./../models/Comment');
 
 router.get('/', async (req, res, next) => {
+  // GET all comments
   try {
     const comments = await Comment.find().limit(20);
     res.send(comments);
@@ -32,6 +33,7 @@ router.get('/name', async (req, res, next) => {
 })
 
 router.get('/:id', async (req, res, next) => {
+  // GET comment by id
   try {
     const comment = await Comment.findById(req.params.id, (err, comment) => {
       if (err) {
@@ -47,6 +49,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
+  // CREATE new comment
   const comment = new Comment({
     name: req.body.name,
     email: req.body.email,
