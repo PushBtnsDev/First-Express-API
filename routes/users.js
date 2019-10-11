@@ -66,4 +66,28 @@ router.post('/', async (req, res, next) => {
   }
 })
 
+
+router.patch('/update/:id', async (req, res, next) => {
+  // PATCH user by id
+  const { name, email, password } = req.body
+  try {
+    const user = await User.findById(req.params.id);
+    if (name) {
+      user.name = name;
+    }
+    if (email) {
+      user.email = email;
+    }
+    if (password) {
+      user.password = password;
+    }
+    await user.save();
+    res.send(user);
+  }
+  catch (err) {
+    res.status(500).send(err);
+  }
+})
+
+
 module.exports = router;
