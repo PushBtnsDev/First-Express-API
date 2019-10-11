@@ -121,4 +121,15 @@ router.patch('/update/:id', async (req, res, next) => {
   }
 })
 
+router.delete('/delete/:id', async (req, res, next) => {
+  // DELETE comment by id
+  try {
+    const comment = await Comment.findOneAndRemove({ _id: req.params.id });
+    res.send(comment);
+  }
+  catch (err) {
+    res.status(500).send(err);
+  }
+})
+
 module.exports = router;
