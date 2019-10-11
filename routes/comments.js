@@ -15,8 +15,8 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/name', async (req, res, next) => {
-  // assumes GET has 'name' query string
   // returns a single comment by provided username
+  // requires GET has 'name' query string
   if (!req.query.name) {
     res.status(422).send('invalid query');
   } else {
@@ -68,6 +68,34 @@ router.post('/', async (req, res, next) => {
   }
 })
 
+router.patch('/update/name', async (req, res, next) => {
+  /*
+  requires request has 'name' query string
+  PATCH comment by username
+  does not practically make sense though unless you find the comment based on username search
+  */
+
+  if (!req.query.name) {
+    res.status(500).send('Invalid query string')
+  } else if (!req.body.text) {
+    res.status(500).send('No text to correct')
+  } else {
+    const { text } = req.body
+    try {
+      const comment = await Comment.findOne({
+        "name" : new RegExp('^' + req.query.name + '$', "i")
+      });
+      comment.text = text;
+      await comment.save();
+      res.send(comment)
+    }
+    catch(err) {
+      res.status(500).send(err);
+    }
+  }
+
+})
+
 router.patch('/update/:id', async (req, res, next) => {
   // PATCH comment by id
   const { text } = req.body
@@ -92,4 +120,5 @@ router.patch('/update/:id', async (req, res, next) => {
     res.status(500).send(err);
   }
 })
+
 module.exports = router;

@@ -15,8 +15,8 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/name', async (req, res, next) => {
-  // assumes GET has 'name' query string
   // returns a single user by provided username
+  // requires GET has 'name' query string
   if (!req.query.name) {
     res.status(422).send('invalid query');
   } else {
