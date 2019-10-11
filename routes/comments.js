@@ -93,7 +93,6 @@ router.patch('/update/name', async (req, res, next) => {
       res.status(500).send(err);
     }
   }
-
 })
 
 router.patch('/update/:id', async (req, res, next) => {
@@ -118,6 +117,24 @@ router.patch('/update/:id', async (req, res, next) => {
   }
   catch (err) {
     res.status(500).send(err);
+  }
+})
+
+router.delete('/delete/name', async (req, res, next) => {
+  // requires query string with name
+  if (!req.query.name) {
+    res.status(500).send('Invalid query string')
+  } else {
+    try {
+      // Deletes the first comment that is found with no double checks
+      const comment = await Comment.findOneAndRemove({
+        "name" : new RegExp('^' + req.query.name + '$', "i")
+      });
+      res.send(comment)
+    }
+    catch(err) {
+      res.status(500).send(err);
+    }
   }
 })
 
