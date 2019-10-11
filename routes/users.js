@@ -48,4 +48,22 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+router.post('/', async (req, res, next) => {
+  // CREATE new user
+  const user = new User({
+    name: req.body.name,
+    email: req.body.email,
+    // TODO: hashing/encription
+    password: req.body.password
+  })
+
+  try {
+    let newUser = await user.save();
+    res.send(newUser);
+  }
+  catch(err) {
+    res.send(500).send(err);
+  }
+})
+
 module.exports = router;
