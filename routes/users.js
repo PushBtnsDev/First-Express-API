@@ -66,6 +66,39 @@ router.post('/', async (req, res, next) => {
   }
 })
 
+router.patch('/update/name', async (req, res, next) => {
+  /*
+  requires request has 'name' query string
+  PATCH user by username
+  does not practically make sense though unless you find the user based on username search
+  */
+
+  if (!req.query.name) {
+    res.status(500).send('Invalid query string')
+  } else {
+    const { name, email, password } = req.body
+    try {
+      const user = await User.findOne({
+        "name" : new RegExp('^' + req.query.name + '$', "i")
+      });
+      if (name) {
+        user.name = name;
+      }
+      if (email) {
+        user.email = email;
+      }
+      if (password) {
+        user.password = password;
+      }
+      await user.save();
+      res.send(user);
+    }
+    catch(err) {
+      res.status(500).send(err);
+    }
+  }
+})
+
 
 router.patch('/update/:id', async (req, res, next) => {
   // PATCH user by id
