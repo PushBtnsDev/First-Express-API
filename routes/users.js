@@ -121,6 +121,25 @@ router.patch('/update/:id', async (req, res, next) => {
   }
 })
 
+router.delete('/delete/name', async (req, res, next) => {
+  // requires query string with name
+  // DELETE user based on username
+  if (!req.query.name) {
+    res.status(500).send('Invalid query string')
+  } else {
+    try {
+      // Deletes the first user that is found with no double checks
+      const user = await User.findOneAndRemove({
+        "name" : new RegExp('^' + req.query.name + '$', "i")
+      });
+      res.send(user);
+    }
+    catch(err) {
+      res.status(500).send(err);
+    }
+  }
+})
+
 router.delete('/delete/:id', async (req, res, next) => {
   // DELETE user by id
   try {
