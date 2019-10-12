@@ -99,7 +99,6 @@ router.patch('/update/name', async (req, res, next) => {
   }
 })
 
-
 router.patch('/update/:id', async (req, res, next) => {
   // PATCH user by id
   const { name, email, password } = req.body
@@ -115,6 +114,17 @@ router.patch('/update/:id', async (req, res, next) => {
       user.password = password;
     }
     await user.save();
+    res.send(user);
+  }
+  catch (err) {
+    res.status(500).send(err);
+  }
+})
+
+router.delete('/delete/:id', async (req, res, next) => {
+  // DELETE user by id
+  try {
+    const user = await User.findOneAndRemove({ _id: req.params.id })
     res.send(user);
   }
   catch (err) {
